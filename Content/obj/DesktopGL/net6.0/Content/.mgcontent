@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Profile>Reach</Profile>
+  <Platform>DesktopGL</Platform>
+  <Config />
+  <SourceFiles>
+    <File>C:/Users/JoshT/source/repos/SnakeProject/SnakeProject/Content/Asset/Apple.png</File>
+    <File>C:/Users/JoshT/source/repos/SnakeProject/SnakeProject/Content/Asset/Background.png</File>
+    <File>C:/Users/JoshT/source/repos/SnakeProject/SnakeProject/Content/Asset/Snake-Body-Turn.png</File>
+    <File>C:/Users/JoshT/source/repos/SnakeProject/SnakeProject/Content/Asset/Snake-Body.png</File>
+    <File>C:/Users/JoshT/source/repos/SnakeProject/SnakeProject/Content/Asset/Snake-Head.png</File>
+    <File>C:/Users/JoshT/source/repos/SnakeProject/SnakeProject/Content/Asset/Snake-Tail.png</File>
+    <File>C:/Users/JoshT/source/repos/SnakeProject/SnakeProject/Content/Asset/Tasty.mp3</File>
+    <File>C:/Users/JoshT/source/repos/SnakeProject/SnakeProject/Content/Asset/Yummy.mp3</File>
+  </SourceFiles>
+  <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+  </DestFiles>
+</SourceFileCollection>
