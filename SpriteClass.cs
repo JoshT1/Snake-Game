@@ -12,8 +12,7 @@ abstract class SpriteClass
     protected Vector2 _scale;
     protected SpriteEffects _effect;
     protected float _depth;
-    protected SpriteBatch _spriteBatch;
-    public SpriteClass(Texture2D texture, Vector2 position, float rotation, SpriteBatch spriteBatch, float depth)
+    public SpriteClass(Texture2D texture, Vector2 position, float rotation, float depth)
 	{
         _texture = texture;
         _position = position;
@@ -23,10 +22,31 @@ abstract class SpriteClass
         _scale = Vector2.One;
         _effect = SpriteEffects.None;
         _depth = depth;
-        _spriteBatch = spriteBatch;
     }
-    public void Draw()
+    public void Draw(SpriteBatch spriteBatch)
     {
-        _spriteBatch.Draw(_texture, _position, null, _color, _rotation, _origin, _scale, _effect, _depth);
+        spriteBatch.Begin();
+        spriteBatch.Draw(_texture, _position, null, _color, _rotation, _origin, _scale, this._effect, _depth);
+        spriteBatch.End();
+    }
+    public Texture2D Texture
+    {
+        get { return _texture; }
+        set { _texture = value; }
+    }
+    public Vector2 Position
+    {
+        get { return _position; }
+        set { _position = value; }
+    }
+    public float Rotation
+    {
+        get { return _rotation; }
+        set { _rotation = value; }
+    }
+    public SpriteEffects SpriteEffect
+    {
+        get { return _effect; }
+        set { _effect = value; }
     }
 }
