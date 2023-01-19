@@ -7,30 +7,9 @@ using static System.Net.Mime.MediaTypeNames;
 
 class SnakeHeadClass : SpriteClass
 {
-    int gridSize;
-    Vector2 node;
-    public List<Vector2> pathList = new List<Vector2>();
-    public List<float> rotList = new List<float>();
     public SnakeHeadClass(Texture2D texture, Vector2 position, float rotation, float depth ) : base(texture, position, rotation, depth)
     {
-        gridSize = 32;
-    }
-    public Vector2 CurrentNode()
-    {
-        node = new Vector2((int)Math.Floor(this.Position.X / gridSize), (int)Math.Floor(this.Position.Y / gridSize));
-
-        if (pathList.Count == 0)
-        {
-            pathList.Add(node);
-            rotList.Add(this.Rotation);
-        }
-        else if (pathList.Last() != node)
-        {
-            pathList.Add(node);
-            rotList.Add(this.Rotation);
-        }
-        //returns a new vector as an easy way to have a paired list to store the snakes movement history
-        return node;
+        this.PathList.Add(new Vector2(4, 7));
     }
     public void BoundCheck(int width, int height)
     {
