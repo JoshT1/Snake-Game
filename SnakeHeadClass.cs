@@ -9,7 +9,6 @@ class SnakeHeadClass : SpriteClass
 {
     public SnakeHeadClass(Texture2D texture, Vector2 position, float rotation, float depth ) : base(texture, position, rotation, depth)
     {
-        this.PathList.Add(new Vector2(4, 7));
     }
     public void BoundCheck(int width, int height)
     {

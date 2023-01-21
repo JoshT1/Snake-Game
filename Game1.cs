@@ -30,14 +30,11 @@ namespace SnakeProject
         Vector2 tailPosition;
         Vector2 applePosition;
         Vector2 velocity;
-        Vector2 gridCenter;
 
         float epsilon;
         float rotation;
-        float distance;
 
         int turnIndex;
-        int gridSize;
         int snakeSpeed;
 
         Song song;
@@ -64,9 +61,9 @@ namespace SnakeProject
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            gridSize = 32;
             headPosition = new Vector2((_graphics.PreferredBackBufferWidth / 2) - 176,
             _graphics.PreferredBackBufferHeight / 2);
+            bodyPosition = headPosition - new Vector2(-32, 0);
             applePosition = new Vector2((_graphics.PreferredBackBufferWidth / 2) + 176,
             _graphics.PreferredBackBufferHeight / 2);
             snakeSpeed = 100;
@@ -105,27 +102,21 @@ namespace SnakeProject
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
-                for (int i = 0; i < headOb.PathList.Count; i++)
+                for (int i = 0; i < bodyOb.PathList.Count; i++)
                 {
                     Debug.WriteLine(headOb.PathList[i].ToString());
+                    Debug.WriteLine(bodyOb.PathList[i].ToString());
+                    Debug.WriteLine("---");
                 }
+
                 Exit();
 
             }
 
             // TODO: Add your update logic here
-            headOb.Position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            // Calculate the x and y grid indices for the current position of the snake head.
-            // If the grid node is new, append current node to pathList.
             headOb.CurrentNode();
             bodyOb.CurrentNode();
-
-            // Calculate the center position of the grid cell at the x and y indices
-            gridCenter = new Vector2((headOb.PathList[^1].X * gridSize) + (gridSize / 2), (headOb.PathList[^1].Y * gridSize) + (gridSize / 2));
-
-            // Calculate the distance between the center of the grid cell and the current position of the sprite
-            distance = Vector2.Distance(headOb.Position, gridCenter);
 
             var kstate = Keyboard.GetState();
             if (kstate.IsKeyDown(Keys.W) && (velocity.Y != snakeSpeed))
@@ -148,7 +139,7 @@ namespace SnakeProject
             {
                 turnIndex = 4;
             }
-            if (distance < epsilon)
+            if (headOb.IsCentered())
             {
 
                 switch (turnIndex)
@@ -178,16 +169,23 @@ namespace SnakeProject
                 }
                 headOb.RotList.Add(headOb.Rotation);
             }
+            //Center the sprites along the grid
+            headOb.CenterSprite();
+            bodyOb.CenterSprite();
             // Update the position of the parts of the snake relative to the head.
-            bodyOb.FollowPath(headOb, (float)gameTime.ElapsedGameTime.TotalSeconds);
+            headOb.Position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            bodyOb.FollowPath(headOb, (float)gameTime.ElapsedGameTime.TotalSeconds, snakeBodyTurn, snakeBody);
 
             //Does not allow the snake to exceed the boundaries. TODO: Game over if boundaries are exceeded.
-        headOb.BoundCheck(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
+            headOb.BoundCheck(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
 
         //If the snake head center is within epsilon of the apple center, set the apples location to the center of a random node.
         AppleOb.PickUpCheck(headOb.Position, epsilon);
 
-        base.Update(gameTime);
+            //
+            headOb.CurrentNode();
+            bodyOb.CurrentNode();
+            base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)

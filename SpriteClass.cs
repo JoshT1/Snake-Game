@@ -17,7 +17,6 @@ abstract class SpriteClass
     protected float _depth;
     protected List<float> _rotList;
     protected List<Vector2> _pathList;
-    protected List<Vector2> _velList;
     protected int _gridSize;
     protected Vector2 _node;
 
@@ -33,30 +32,7 @@ abstract class SpriteClass
         _scale = Vector2.One;
         _effect = SpriteEffects.None;
         _depth = depth;
-        _velList = new List<Vector2>() { new Vector2(50, 0), new Vector2(50, 0) };
         _gridSize = 32;
-        _node = new Vector2((int)Math.Floor(this.Position.X / _gridSize), (int)Math.Floor(this.Position.Y / _gridSize));
-    }
-    public void Draw(SpriteBatch spriteBatch)
-    {
-        spriteBatch.Begin();
-        spriteBatch.Draw(_texture, _position, null, _color, _rotation, _origin, _scale, this._effect, _depth);
-        spriteBatch.End();
-    }
-    public void CurrentNode()
-    {
-        _node = new Vector2((int)Math.Floor(this.Position.X / _gridSize), (int)Math.Floor(this.Position.Y / _gridSize));
-        if (Math.Abs(this.Position.X % _gridSize - _gridSize / 2) < 2f && Math.Abs(this.Position.Y % _gridSize - _gridSize / 2) < 2f)
-        {
-            if (this.PathList.Count == 1)
-            {
-                this.PathList.Add(_node);
-            }
-            else if (this.PathList.Last() != _node)
-            {
-                this.PathList.Add(_node);
-            }
-        }
     }
     public Texture2D Texture
     {
@@ -88,14 +64,60 @@ abstract class SpriteClass
         get { return _effect; }
         set { _effect = value; }
     }
-    public List<Vector2> VelList
-    {
-        get { return _velList; }
-        set { _velList = value; }
-    }
     public int GridSize
     {
         get { return _gridSize; }
         set { _gridSize = value; }
+    }
+        public void Draw(SpriteBatch spriteBatch)
+    {
+        spriteBatch.Begin();
+        spriteBatch.Draw(_texture, _position, null, _color, _rotation, _origin, _scale, this._effect, _depth);
+        spriteBatch.End();
+    }
+    public void CurrentNode()
+    {
+        // Calculate the x and y grid coordinates for the current position of the snake head.
+        // If the grid node is new, append current node to pathList.
+        _node = new Vector2((int)Math.Floor(this.Position.X / _gridSize), (int)Math.Floor(this.Position.Y / _gridSize));
+        if (Math.Abs(this.Position.X % _gridSize - _gridSize / 2) < 1f && Math.Abs(this.Position.Y % _gridSize - _gridSize / 2) < 1f)
+        {
+            if (this.PathList.Count == 0)
+            {
+                this.PathList.Add(_node);
+            }
+            else if (this.PathList.Last() != _node)
+            {
+                this.PathList.Add(_node);
+            }
+        }
+    }
+    public void CenterSprite()
+    {
+        if (this.Rotation == (float)Math.PI * 1.5f || this.Rotation == (float)Math.PI / 2)
+        {
+            this.Position = new Vector2(this.Position.X, ((int)Math.Floor(this.Position.Y / _gridSize) * _gridSize) + _gridSize / 2);
+        }
+        if (this.Rotation == 0 || this.Rotation == (float)Math.PI)
+        {
+            this.Position = new Vector2(((int)Math.Floor(this.Position.X / _gridSize) * _gridSize) + _gridSize / 2, this.Position.Y);
+        }
+    }
+    public Boolean IsCentered()
+    {
+        // Calculate the center position of the grid cell at the x and y indices
+        Vector2 gridCenter = new Vector2((this.PathList[^1].X * _gridSize) + (_gridSize / 2), (this.PathList[^1].Y * _gridSize) + (_gridSize / 2));
+
+        // Calculate the distance between the center of the grid cell and the current position of the sprite
+        float distance = Vector2.Distance(this.Position, gridCenter);
+
+        if (distance < 1f)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
