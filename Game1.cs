@@ -174,7 +174,7 @@ namespace SnakeProject
             bodyOb.CenterSprite();
             // Update the position of the parts of the snake relative to the head.
             headOb.Position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            bodyOb.FollowPath(headOb, (float)gameTime.ElapsedGameTime.TotalSeconds, snakeBodyTurn, snakeBody);
+            bodyOb.FollowPath(headOb, velocity, snakeBodyTurn, snakeBody);
 
             //Does not allow the snake to exceed the boundaries. TODO: Game over if boundaries are exceeded.
             headOb.BoundCheck(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
@@ -197,10 +197,10 @@ namespace SnakeProject
             SpriteBatch.Draw(Background, new Rectangle(0, 0, 640, 480), Color.White);
             SpriteBatch.End();
 
-            headOb.Draw(SpriteBatch);
-            bodyOb.Draw(SpriteBatch);
-            tailOb.Draw(SpriteBatch);
             AppleOb.Draw(SpriteBatch);
+            tailOb.Draw(SpriteBatch);
+            bodyOb.Draw(SpriteBatch);
+            headOb.Draw(SpriteBatch);
 
             base.Draw(gameTime);
         }

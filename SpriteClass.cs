@@ -20,6 +20,7 @@ abstract class SpriteClass
     protected int _gridSize;
     protected Vector2 _node;
 
+
     public SpriteClass(Texture2D texture, Vector2 position, float rotation, float depth)
     {
         _texture = texture;
@@ -33,6 +34,7 @@ abstract class SpriteClass
         _effect = SpriteEffects.None;
         _depth = depth;
         _gridSize = 32;
+
     }
     public Texture2D Texture
     {
@@ -69,7 +71,7 @@ abstract class SpriteClass
         get { return _gridSize; }
         set { _gridSize = value; }
     }
-        public void Draw(SpriteBatch spriteBatch)
+    public void Draw(SpriteBatch spriteBatch)
     {
         spriteBatch.Begin();
         spriteBatch.Draw(_texture, _position, null, _color, _rotation, _origin, _scale, this._effect, _depth);
