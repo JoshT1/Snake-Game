@@ -64,7 +64,7 @@ namespace SnakeProject
             // TODO: Add your initialization logic here
             headPosition = new Vector2((_graphics.PreferredBackBufferWidth / 2) - 176,
             _graphics.PreferredBackBufferHeight / 2);
-            bodyPosition = headPosition - new Vector2(-32, 0);
+            bodyPosition = headPosition + new Vector2(-32, 0);
             applePosition = new Vector2((_graphics.PreferredBackBufferWidth / 2) + 176,
             _graphics.PreferredBackBufferHeight / 2);
             snakeSpeed = 100;
@@ -93,7 +93,7 @@ namespace SnakeProject
             //Create sprite objects
             headOb = new SnakeHeadClass(snakeHead, headPosition, rotation, 0f);
             bodyOb = new SnakeBodyClass(snakeBody, bodyPosition, rotation, 0f);
-            bodyOb2 = new SnakeBodyClass(snakeBody, bodyPosition - new Vector2(-32, 0), rotation, 0f);
+            bodyOb2 = new SnakeBodyClass(snakeBody, bodyPosition + new Vector2(-32, 0), rotation, 0f);
             tailOb = new SnakeTailClass(snakeTail, tailPosition, rotation, 0f);
             AppleOb = new AppleClass(Apple, applePosition, 0, 0f);
 
@@ -104,9 +104,10 @@ namespace SnakeProject
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
-                for (int i = 0; i < headOb.RotList.Count; i++)
+                for (int i = 0; i < bodyOb.RotList.Count; i++)
                 {
-                    Debug.WriteLine(headOb.RotList[i].ToString());
+                    Debug.WriteLine("HeadOb " + headOb.RotList[i].ToString());
+                    Debug.WriteLine("BodyOb " + bodyOb.RotList[i].ToString());
                     Debug.WriteLine("---");
                 }
 
