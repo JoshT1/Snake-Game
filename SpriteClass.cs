@@ -56,7 +56,7 @@ abstract class SpriteClass
         get { return _rotation; }
         set { _rotation = value; }
     }
-    public List<float> RotList
+    public List<float> RotList  
     {
         get { return _rotList; }
         set { _rotList = value; }

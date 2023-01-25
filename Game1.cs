@@ -44,6 +44,7 @@ namespace SnakeProject
 
         private SnakeHeadClass headOb;
         private SnakeBodyClass bodyOb;
+        private SnakeBodyClass bodyOb2;
         private SnakeTailClass tailOb;
         private AppleClass AppleOb;
 
@@ -92,6 +93,7 @@ namespace SnakeProject
             //Create sprite objects
             headOb = new SnakeHeadClass(snakeHead, headPosition, rotation, 0f);
             bodyOb = new SnakeBodyClass(snakeBody, bodyPosition, rotation, 0f);
+            bodyOb2 = new SnakeBodyClass(snakeBody, bodyPosition - new Vector2(-32, 0), rotation, 0f);
             tailOb = new SnakeTailClass(snakeTail, tailPosition, rotation, 0f);
             AppleOb = new AppleClass(Apple, applePosition, 0, 0f);
 
@@ -102,10 +104,9 @@ namespace SnakeProject
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
-                for (int i = 0; i < bodyOb.PathList.Count; i++)
+                for (int i = 0; i < headOb.RotList.Count; i++)
                 {
-                    Debug.WriteLine(headOb.PathList[i].ToString());
-                    Debug.WriteLine(bodyOb.PathList[i].ToString());
+                    Debug.WriteLine(headOb.RotList[i].ToString());
                     Debug.WriteLine("---");
                 }
 
@@ -117,6 +118,7 @@ namespace SnakeProject
 
             headOb.CurrentNode();
             bodyOb.CurrentNode();
+            bodyOb2.CurrentNode();
 
             var kstate = Keyboard.GetState();
             if (kstate.IsKeyDown(Keys.W) && (velocity.Y != snakeSpeed))
@@ -172,9 +174,12 @@ namespace SnakeProject
             //Center the sprites along the grid
             headOb.CenterSprite();
             bodyOb.CenterSprite();
+            bodyOb2.CenterSprite();
             // Update the position of the parts of the snake relative to the head.
             headOb.Position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            bodyOb.FollowPath(headOb, velocity, snakeBodyTurn, snakeBody);
+            bodyOb.FollowPath(headOb, snakeBodyTurn, snakeBody);
+            bodyOb2.FollowPath(bodyOb, snakeBodyTurn, snakeBody);
+
 
             //Does not allow the snake to exceed the boundaries. TODO: Game over if boundaries are exceeded.
             headOb.BoundCheck(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
@@ -185,6 +190,7 @@ namespace SnakeProject
             //
             headOb.CurrentNode();
             bodyOb.CurrentNode();
+            bodyOb2.CurrentNode();
             base.Update(gameTime);
         }
 
@@ -199,6 +205,7 @@ namespace SnakeProject
 
             AppleOb.Draw(SpriteBatch);
             tailOb.Draw(SpriteBatch);
+            bodyOb2.Draw(SpriteBatch);
             bodyOb.Draw(SpriteBatch);
             headOb.Draw(SpriteBatch);
 
