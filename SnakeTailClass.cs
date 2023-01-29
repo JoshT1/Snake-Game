@@ -4,7 +4,7 @@ using System;
 
 class SnakeTailClass : SpriteClass
 {
-    public SnakeTailClass(Texture2D texture, Vector2 position, float rotation, float depth) : base(texture, position, rotation, depth)
+    public SnakeTailClass(Texture2D texture, Vector2 position, float rotation) : base(texture, position, rotation)
     {
 
     }

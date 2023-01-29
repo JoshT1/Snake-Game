@@ -7,7 +7,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 class SnakeHeadClass : SpriteClass
 {
-    public SnakeHeadClass(Texture2D texture, Vector2 position, float rotation, float depth ) : base(texture, position, rotation, depth)
+    public SnakeHeadClass(Texture2D texture, Vector2 position, float rotation) : base(texture, position, rotation)
     {
     }
     public void BoundCheck(int width, int height)

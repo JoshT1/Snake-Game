@@ -27,15 +27,10 @@ namespace SnakeProject
 
         Vector2 headPosition;
         Vector2 bodyPosition;
-        Vector2 tailPosition;
         Vector2 applePosition;
         Vector2 velocity;
 
-        float epsilon;
         float rotation;
-        //
-        float a;
-        //
 
         int turnIndex;
         int snakeSpeed;
@@ -47,9 +42,10 @@ namespace SnakeProject
 
         private SnakeHeadClass headOb;
         private SnakeBodyClass bodyOb;
-        private SnakeBodyClass bodyOb2;
-        private SnakeTailClass tailOb;
+        private SnakeBodyClass tailOb;
         private AppleClass AppleOb;
+
+        List<SnakeBodyClass> snakeList = new List<SnakeBodyClass>();
 
 
 
@@ -73,9 +69,7 @@ namespace SnakeProject
             snakeSpeed = 100;
             velocity = new Vector2(snakeSpeed, 0);
             rotation = (float)Math.PI / 2;
-            a = rotation;
             turnIndex = 0;
-            epsilon = 2f;
             MediaPlayer.Volume = 0.1f;
             base.Initialize();
         }
@@ -95,11 +89,13 @@ namespace SnakeProject
             song = Content.Load<Song>("Tasty");
 
             //Create sprite objects
-            headOb = new SnakeHeadClass(snakeHead, headPosition, rotation, 0f);
-            bodyOb = new SnakeBodyClass(snakeBody, bodyPosition, rotation, 0f);
-            bodyOb2 = new SnakeBodyClass(snakeBody, bodyPosition + new Vector2(-32, 0), rotation, 0f);
-            tailOb = new SnakeTailClass(snakeTail, tailPosition, rotation, 0f);
-            AppleOb = new AppleClass(Apple, applePosition, 0, 0f);
+            headOb = new SnakeHeadClass(snakeHead, headPosition, rotation);
+            bodyOb = new SnakeBodyClass(snakeBody, bodyPosition, rotation);
+            tailOb = new SnakeBodyClass(snakeTail, bodyPosition + new Vector2(-32, 0), rotation);
+            AppleOb = new AppleClass(Apple, applePosition, 0);
+
+            //fill initial snake list
+            snakeList.Add(bodyOb);
 
 
         }
@@ -108,10 +104,9 @@ namespace SnakeProject
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
-                for (int i = 0; i < bodyOb.RotList.Count; i++)
+                for (int i = 0; i < snakeList.Count; i++)
                 {
-                    Debug.WriteLine("HeadOb " + bodyOb.RotList[i].ToString());
-                    Debug.WriteLine("BodyOb " + bodyOb.RotList[i].ToString());
+                    Debug.WriteLine(i.ToString() + " " + snakeList[i].ToString());
                     Debug.WriteLine("---");
                 }
 
@@ -122,8 +117,8 @@ namespace SnakeProject
             // TODO: Add your update logic here
 
             headOb.CurrentNode();
-            bodyOb.CurrentNode();
-            bodyOb2.CurrentNode();
+            snakeList.ForEach(i => i.CurrentNode());
+            tailOb.CurrentNode();
 
             var kstate = Keyboard.GetState();
             if (kstate.IsKeyDown(Keys.W) && (velocity.Y != snakeSpeed))
@@ -175,28 +170,35 @@ namespace SnakeProject
                         break;
                 }
                 headOb.RotList.Add(headOb.Rotation);
-                bodyOb.RotList.Add(bodyOb.Rotation);
-                bodyOb2.RotList.Add(bodyOb2.Rotation);
+                snakeList.ForEach(i => i.RotList.Add(i.Rotation));
+                tailOb.RotList.Add(tailOb.Rotation);
             }
             //Center the sprites along the grid
             headOb.CenterSprite();
-            bodyOb.CenterSprite();
-            bodyOb2.CenterSprite();
+            snakeList.ForEach(i => i.CenterSprite());
+            tailOb.CenterSprite();
+
             // Update the position of the parts of the snake relative to the head.
             headOb.Position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            bodyOb.FollowPath(headOb, snakeBodyTurn, snakeBody);
-            bodyOb2.FollowPath(bodyOb, snakeBodyTurn, snakeBody);
-
+            foreach (SnakeBodyClass ob in snakeList)
+            {
+                if(snakeList.IndexOf(ob) == 0) 
+                {
+                    ob.FollowPath(headOb, snakeBodyTurn, snakeBody);
+                }
+                else
+                {
+                    ob.FollowPath(snakeList[snakeList.IndexOf(ob) - 1], snakeBodyTurn, snakeBody);
+                }
+            }
+            tailOb.FollowPath(snakeList[^1], snakeBodyTurn, snakeTail);
 
             //Does not allow the snake to exceed the boundaries. TODO: Game over if boundaries are exceeded.
             headOb.BoundCheck(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
 
         //If the snake head center is within epsilon of the apple center, set the apples location to the center of a random node.
-        AppleOb.PickUpCheck(headOb.Position, epsilon);
+        AppleOb.PickUpCheck(headOb.Position,snakeList,tailOb, snakeBody);
 
-
-
-            
             base.Update(gameTime);
         }
 
@@ -211,8 +213,7 @@ namespace SnakeProject
 
             AppleOb.Draw(SpriteBatch);
             tailOb.Draw(SpriteBatch);
-            bodyOb.Draw(SpriteBatch);
-            bodyOb2.Draw(SpriteBatch);
+            snakeList.ForEach(i => i.Draw(SpriteBatch));
             headOb.Draw(SpriteBatch);
 
             base.Draw(gameTime);

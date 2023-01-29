@@ -14,14 +14,13 @@ abstract class SpriteClass
     protected float _rotation;
     protected Vector2 _scale;
     protected SpriteEffects _effect;
-    protected float _depth;
     protected List<float> _rotList;
     protected List<Vector2> _pathList;
     protected int _gridSize;
     protected Vector2 _node;
 
 
-    public SpriteClass(Texture2D texture, Vector2 position, float rotation, float depth)
+    public SpriteClass(Texture2D texture, Vector2 position, float rotation)
     {
         _texture = texture;
         _position = position;
@@ -32,7 +31,6 @@ abstract class SpriteClass
         _rotList = new List<float>() { this.Rotation, this.Rotation };
         _scale = Vector2.One;
         _effect = SpriteEffects.None;
-        _depth = depth;
         _gridSize = 32;
 
     }
@@ -74,7 +72,7 @@ abstract class SpriteClass
     public void Draw(SpriteBatch spriteBatch)
     {
         spriteBatch.Begin();
-        spriteBatch.Draw(_texture, _position, null, _color, _rotation, _origin, _scale, this._effect, _depth);
+        spriteBatch.Draw(_texture, _position, null, _color, _rotation, _origin, _scale, this._effect, 0f);
         spriteBatch.End();
     }
     public void CurrentNode()

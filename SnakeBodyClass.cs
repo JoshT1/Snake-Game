@@ -7,7 +7,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 class SnakeBodyClass : SpriteClass
 {
-    public SnakeBodyClass(Texture2D texture, Vector2 position, float rotation, float depth) : base(texture, position, rotation, depth)
+    public SnakeBodyClass(Texture2D texture, Vector2 position, float rotation) : base(texture, position, rotation)
     {
     }
     public void FollowPath(SpriteClass Ob, Texture2D turn, Texture2D stra)
