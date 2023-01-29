@@ -33,6 +33,9 @@ namespace SnakeProject
 
         float epsilon;
         float rotation;
+        //
+        float a;
+        //
 
         int turnIndex;
         int snakeSpeed;
@@ -70,6 +73,7 @@ namespace SnakeProject
             snakeSpeed = 100;
             velocity = new Vector2(snakeSpeed, 0);
             rotation = (float)Math.PI / 2;
+            a = rotation;
             turnIndex = 0;
             epsilon = 2f;
             MediaPlayer.Volume = 0.1f;
@@ -106,7 +110,7 @@ namespace SnakeProject
             {
                 for (int i = 0; i < bodyOb.RotList.Count; i++)
                 {
-                    Debug.WriteLine("HeadOb " + headOb.RotList[i].ToString());
+                    Debug.WriteLine("HeadOb " + bodyOb.RotList[i].ToString());
                     Debug.WriteLine("BodyOb " + bodyOb.RotList[i].ToString());
                     Debug.WriteLine("---");
                 }
@@ -171,6 +175,8 @@ namespace SnakeProject
                         break;
                 }
                 headOb.RotList.Add(headOb.Rotation);
+                bodyOb.RotList.Add(bodyOb.Rotation);
+                bodyOb2.RotList.Add(bodyOb2.Rotation);
             }
             //Center the sprites along the grid
             headOb.CenterSprite();
@@ -188,10 +194,9 @@ namespace SnakeProject
         //If the snake head center is within epsilon of the apple center, set the apples location to the center of a random node.
         AppleOb.PickUpCheck(headOb.Position, epsilon);
 
-            //
-            headOb.CurrentNode();
-            bodyOb.CurrentNode();
-            bodyOb2.CurrentNode();
+
+
+            
             base.Update(gameTime);
         }
 
@@ -206,8 +211,8 @@ namespace SnakeProject
 
             AppleOb.Draw(SpriteBatch);
             tailOb.Draw(SpriteBatch);
-            bodyOb2.Draw(SpriteBatch);
             bodyOb.Draw(SpriteBatch);
+            bodyOb2.Draw(SpriteBatch);
             headOb.Draw(SpriteBatch);
 
             base.Draw(gameTime);

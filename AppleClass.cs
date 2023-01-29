@@ -10,6 +10,7 @@ class AppleClass : SpriteClass
     public AppleClass(Texture2D texture, Vector2 position , float rotation, float depth) : base(texture, position, rotation, depth)
     {
         gridSize = 32;
+        count = 0;
     }
 
     public Vector2 PickUpCheck(Vector2 position, float epsilon)
